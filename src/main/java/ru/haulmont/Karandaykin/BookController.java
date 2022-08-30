@@ -1,30 +1,40 @@
 package ru.haulmont.Karandaykin;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import java.util.List;
 
-@Controller
-public class BookController {
-    @Autowired
-    private BookService bookService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-    @GetMapping("/")
-    public String getAll(Model model) {
-        List<Book> bookList = bookService.getAll();
-        model.addAttribute("bookList", bookList);
-        model.addAttribute("bookList", bookList.size());
-        return "index";
+@RestController
+@RequestMapping("/books")
+public class BookController {
+
+    private final BookService bookService;
+
+    @Autowired
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
     }
 
-    @PostMapping("/add")
-    public String addBook(@ModelAttribute Book book) {
+    @GetMapping("/all")
+    public ResponseEntity<List<Book>> getAll() {
+        List<Book> bookList = bookService.getAll();
+        return new ResponseEntity<>(bookList, HttpStatus.OK);
+    }
+
+    @GetMapping("/create")
+    public ResponseEntity<Book> addBook(@RequestParam String name, @RequestParam String manufacturer, @RequestParam int year) {
+        Book book = new Book()
+                .setBookName(name)
+                .setPublishYear(year)
+                .setPublisher(manufacturer);
         bookService.save(book);
-        return "redirect:/";
+        return new ResponseEntity<>(book, HttpStatus.OK);
     }
 }
