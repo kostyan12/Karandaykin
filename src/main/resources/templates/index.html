@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Organizer</title>
+      <link rel="stylesheet" type="text/css" href="/css/style.x60824.css"/>
+</head>
+<body>
+<h1>Books</h1>
+<h3>Add book to list</h3>
+<form action="/add" method="post">
+    <table border="1px">
+        <tr>
+            <td>
+                <label>Book name</label>
+                <input type="text" name="bookName">
+            </td>
+            <td>
+                <label>Publish year</label>
+                <input type="number" name="publishYear">
+            </td>
+            <td>
+                <label>Publisher</label>
+                <input type="text" name="publisher">
+            </td>
+
+            <td>
+                <input type="submit" value="add book">
+            </td>
+
+        </tr>
+
+    </table>
+</form>
+<br>
+<h2>Book list(book count : ${bookSize})</h2>
+<table border="1px">
+    <tr>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Publish year</td>
+        <td>Publisher</td>
+    <#list taskList as task>
+    <tr>
+        <td>${book.id}</td>
+        <td>${book.bookName}</td>
+        <td>${book.publishYear}</td>
+        <td>${book.publisher}</td>
+    </tr>
+    </#list>
+</table>
+</body>
+</html>
